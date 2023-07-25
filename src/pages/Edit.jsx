@@ -1,8 +1,36 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function Edit() {
+export default function Edit({ todos, setTodos }) {
+  const { id } = useParams();
+  // console.log("id:", id);
+
+  const nevigate = useNavigate();
+
+  const todoId = parseInt(id);
+  const todo = todos.find((todo) => todo.id === todoId);
+  // console.log(selectTodo);
+
+  // 수정하기 내용을 저장
+  const [title, setTitle] = useState(todo.title);
+  const [content, setContent] = useState(todo.content);
+
+  const upDatedTodoHandler = (e) => {
+    e.preventDefault();
+
+    const upDatedTodo = { ...todo, title, content };
+    console.log(upDatedTodo);
+
+    //  일치하는 id만 바꿔주기  아니면 그대로 유지
+    const upDatedTodos = todos.map((p) => (p.id === todo.id ? upDatedTodo : p));
+
+    setTodos(upDatedTodos);
+
+    nevigate("/");
+  };
+
   return (
     <Fragment>
       <Header />
@@ -14,13 +42,12 @@ export default function Edit() {
             flexDirection: "column",
             justifyContent: "space-evenly",
           }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("제출!");
-          }}
+          onSubmit={upDatedTodoHandler}
         >
           <div>
             <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="제목"
               style={{
                 width: "100%",
@@ -39,6 +66,8 @@ export default function Edit() {
             }}
           >
             <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
               placeholder="내용"
               style={{
                 resize: "none",

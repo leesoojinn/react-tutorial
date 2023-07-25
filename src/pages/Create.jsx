@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
-import { nanoid } from "nanoid";
 import { useNavigate } from "react-router-dom";
 
 export default function Create({ todos, setTodos }) {
@@ -12,7 +11,7 @@ export default function Create({ todos, setTodos }) {
 
   const addButtonHandler = () => {
     const newTodo = {
-      id: nanoid(),
+      id: todos.length + 1,
       title: addTitle,
       content: addContent,
     };

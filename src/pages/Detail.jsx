@@ -3,7 +3,7 @@ import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function Detail({ todos }) {
+export default function Detail({ todos, setTodos }) {
   const navigate = useNavigate();
   const { id } = useParams();
   console.log("id:", id);

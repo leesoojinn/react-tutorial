@@ -83,7 +83,7 @@ export default function Main({ todos }) {
               <div>
                 <button
                   onClick={() => {
-                    navigate("/edit");
+                    navigate(`/edit/${todo.id}`);
                   }}
                   style={{
                     border: "none",

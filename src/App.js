@@ -35,12 +35,18 @@ function App() {
     <Routes>
       {/* path="/"이기 때문에 '<주소>/'인 주소로 접속할 경우 Main 컴포넌트가 화면에 보여지게 된다.  */}
       <Route path="/" element={<Main todos={todos} />} />
-      <Route path="/detail/:id" element={<Detail todos={todos} />} />
+      <Route
+        path="/detail/:id"
+        element={<Detail todos={todos} setTodos={setTodos} />}
+      />
       <Route
         path="/create"
         element={<Create todos={todos} setTodos={setTodos} />}
       />
-      <Route path="/edit" element={<Edit />} />
+      <Route
+        path="/edit/:id"
+        element={<Edit todos={todos} setTodos={setTodos} />}
+      />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
     </Routes>
