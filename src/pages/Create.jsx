@@ -11,6 +11,7 @@ export default function Create({ todos, setTodos }) {
 
   const addButtonHandler = () => {
     const newTodo = {
+      // 새로운 todo id 하나 늘리기
       id: todos.length + 1,
       title: addTitle,
       content: addContent,

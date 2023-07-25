@@ -7,6 +7,7 @@ export default function Edit({ todos, setTodos }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // todo의 id와 useparams로 가져온 id를 형변환
   const todoId = parseInt(id);
   const todo = todos.find((todo) => todo.id === todoId);
 
@@ -20,6 +21,7 @@ export default function Edit({ todos, setTodos }) {
     setContent(todo.content);
   }, [todo]);
 
+  // 수정 버튼 핸들러
   const upDatedTodoHandler = (e) => {
     e.preventDefault();
 

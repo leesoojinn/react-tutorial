@@ -28,6 +28,7 @@ export default function Edit({ todos, setTodos }) {
 
     setTodos(upDatedTodos);
 
+    // 삭제되면 홈으로 이동
     navigate("/");
   };
 
