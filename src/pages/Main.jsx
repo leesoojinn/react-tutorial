@@ -3,8 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 
-export default function Main({ todos }) {
+export default function Main({ todos, setTodos }) {
   const navigate = useNavigate();
+
+  // 삭제 버튼
+  const deletedButtonHandler = (todoId) => {
+    const deletedTodo = todos.filter((item) => item.id !== todoId);
+    setTodos(deletedTodo);
+  };
 
   return (
     <>
@@ -100,6 +106,7 @@ export default function Main({ todos }) {
                 <button
                   onClick={() => {
                     alert("삭제할까?");
+                    deletedButtonHandler(todo.id);
                   }}
                   style={{
                     border: "none",

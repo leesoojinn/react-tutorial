@@ -7,7 +7,7 @@ export default function Edit({ todos, setTodos }) {
   const { id } = useParams();
   // console.log("id:", id);
 
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
 
   const todoId = parseInt(id);
   const todo = todos.find((todo) => todo.id === todoId);
@@ -28,7 +28,7 @@ export default function Edit({ todos, setTodos }) {
 
     setTodos(upDatedTodos);
 
-    nevigate("/");
+    navigate("/");
   };
 
   return (
