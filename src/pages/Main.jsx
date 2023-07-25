@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 
 export default function Main() {
+  const [todos, setTodos] = useState([
+    {
+      id: 1,
+      title: "공부하기",
+      content: "오늘 정예반 과제 끝내야해",
+      author: "짱구",
+    },
+    {
+      id: 1,
+      title: "돌 줍기",
+      content: "예쁜 돌 주워서 집에 가져갈거야",
+      author: "맹구",
+    },
+    {
+      id: 1,
+      title: "소꿉놀이",
+      content: "애들 모아서 소꿉놀이 해야징",
+      author: "유리",
+    },
+  ]);
+
   const navigate = useNavigate();
   return (
     <>
@@ -32,9 +53,21 @@ export default function Main() {
             추가
           </button>
         </div>
-        {[1, 2, 3, 4].map((item) => (
+        {/* {[1, 2, 3, 4].map((item) => (
           <div
             key={item}
+            style={{
+              backgroundColor: "#EEEEEE",
+              height: "100px",
+              borderRadius: "24px",
+              marginBottom: "12px",
+              display: "flex",
+              padding: "12px 16px 12px 16px",
+            }}
+          > */}
+        {todos.map((todo) => (
+          <div
+            key={todo.id}
             style={{
               backgroundColor: "#EEEEEE",
               height: "100px",
@@ -54,7 +87,7 @@ export default function Main() {
                 cursor: "pointer",
               }}
             >
-              <h2>제목</h2>
+              <h2>{todo.title}</h2>
               <p
                 style={{
                   width: "300px",
@@ -63,10 +96,7 @@ export default function Main() {
                   whiteSpace: "nowrap",
                 }}
               >
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.Lorem
-                ipsum dolor, sit amet consectetur adipisicing elit.Lorem ipsum
-                dolor, sit amet consectetur adipisicing elit.Lorem ipsum dolor,
-                sit amet consectetur adipisicing elit.
+                {todo.content}
               </p>
             </div>
             <div
@@ -79,7 +109,7 @@ export default function Main() {
                 gap: "12px",
               }}
             >
-              <div>작성자</div>
+              <div>{todo.author}</div>
               <div>
                 <button
                   onClick={() => {
