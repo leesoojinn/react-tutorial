@@ -20,6 +20,7 @@ export default function Header() {
           cursor: "pointer",
         }}
       >
+        {/* usNavigate로 홈 아이콘을 누르면 main으로 이동 */}
         <FaHome onClick={() => navigate("/")} />
       </h1>
       <div

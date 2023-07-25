@@ -1,31 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 
-export default function Main() {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: "공부하기",
-      content: "오늘 정예반 과제 끝내야해",
-      author: "짱구",
-    },
-    {
-      id: 1,
-      title: "돌 줍기",
-      content: "예쁜 돌 주워서 집에 가져갈거야",
-      author: "맹구",
-    },
-    {
-      id: 1,
-      title: "소꿉놀이",
-      content: "애들 모아서 소꿉놀이 해야징",
-      author: "유리",
-    },
-  ]);
-
+export default function Main({ todos }) {
   const navigate = useNavigate();
+
   return (
     <>
       <Header />
@@ -53,24 +33,13 @@ export default function Main() {
             추가
           </button>
         </div>
-        {/* {[1, 2, 3, 4].map((item) => (
-          <div
-            key={item}
-            style={{
-              backgroundColor: "#EEEEEE",
-              height: "100px",
-              borderRadius: "24px",
-              marginBottom: "12px",
-              display: "flex",
-              padding: "12px 16px 12px 16px",
-            }}
-          > */}
+        {/* map함수로 todos를 돌려 내용 가져오기 */}
         {todos.map((todo) => (
           <div
+            // key값으로 고유한 값 넣어주기
             key={todo.id}
             style={{
               backgroundColor: "#EEEEEE",
-              height: "100px",
               borderRadius: "24px",
               marginBottom: "12px",
               display: "flex",
@@ -79,7 +48,8 @@ export default function Main() {
           >
             <div
               onClick={() => {
-                navigate("/detail/1");
+                // todo의 id로 페이지 이동
+                navigate(`/detail/${todo.id}`);
               }}
               style={{
                 flex: 4,

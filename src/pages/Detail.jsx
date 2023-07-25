@@ -1,10 +1,16 @@
 import React from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function Detail() {
+export default function Detail({ todos }) {
   const navigate = useNavigate();
+  const { id } = useParams();
+  console.log("id:", id);
+
+  const selectTodo = todos.find((todo) => todo.id === parseInt(id));
+  console.log(selectTodo);
+
   return (
     <>
       <Header />
@@ -16,7 +22,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          제목
+          {selectTodo.title}
         </h1>
         <div
           style={{
@@ -26,10 +32,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad doloribus
-          blanditiis vitae sapiente. Expedita delectus nihil animi pariatur,
-          labore quod officiis dolor fugit. Mollitia quod, delectus velit
-          deleniti nihil veniam!
+          {selectTodo.content}
         </div>
         <div
           style={{

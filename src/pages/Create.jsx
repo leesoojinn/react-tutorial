@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
+import { nanoid } from "nanoid";
+import { useNavigate } from "react-router-dom";
 
-export default function Create() {
+export default function Create({ todos, setTodos }) {
+  const [addTitle, setAddTitle] = useState("");
+  const [addContent, setAddContent] = useState("");
+
+  const navigate = useNavigate();
+
+  const addButtonHandler = () => {
+    const newTodo = {
+      id: nanoid(),
+      title: addTitle,
+      content: addContent,
+    };
+    setTodos([...todos, newTodo]);
+  };
+
   return (
     <>
       <Header />
@@ -21,6 +37,8 @@ export default function Create() {
         >
           <div>
             <input
+              value={addTitle}
+              onChange={(e) => setAddTitle(e.target.value)}
               placeholder="제목"
               style={{
                 width: "100%",
@@ -39,6 +57,8 @@ export default function Create() {
             }}
           >
             <textarea
+              value={addContent}
+              onChange={(e) => setAddContent(e.target.value)}
               placeholder="내용"
               style={{
                 resize: "none",
@@ -53,6 +73,10 @@ export default function Create() {
             />
           </div>
           <button
+            onClick={() => {
+              addButtonHandler();
+              navigate("/");
+            }}
             style={{
               width: "100%",
               height: "40px",
