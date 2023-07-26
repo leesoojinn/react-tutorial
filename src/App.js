@@ -6,24 +6,25 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Edit from "./pages/Edit";
 import { useState } from "react";
+import { nanoid } from "nanoid";
 
 function App() {
   // useState로 todos의 내용 저장하기
   const [todos, setTodos] = useState([
     {
-      id: 1,
+      id: nanoid(),
       title: "공부하기",
       content: "오늘 정예반 과제 끝내야해",
       author: "짱구",
     },
     {
-      id: 2,
+      id: nanoid(),
       title: "돌 줍기",
       content: "예쁜 돌 주워서 집에 가져갈거야",
       author: "맹구",
     },
     {
-      id: 3,
+      id: nanoid(),
       title: "소꿉놀이",
       content: "애들 모아서 소꿉놀이 해야징",
       author: "유리",

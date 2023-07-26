@@ -7,6 +7,7 @@ export default function Main({ todos, setTodos }) {
   const navigate = useNavigate();
 
   // 삭제 버튼
+  // filter로 같은 아이디 값이 아닌 것만 보이게 하기
   const deletedButtonHandler = (todoId) => {
     const deletedTodo = todos.filter((item) => item.id !== todoId);
     setTodos(deletedTodo);

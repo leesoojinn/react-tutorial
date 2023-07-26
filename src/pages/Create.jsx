@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
 
 export default function Create({ todos, setTodos }) {
   const [addTitle, setAddTitle] = useState("");
@@ -12,9 +13,11 @@ export default function Create({ todos, setTodos }) {
   const addButtonHandler = () => {
     const newTodo = {
       // 새로운 todo id 하나 늘리기
-      id: todos.length + 1,
+      // 나중에 nanoId로
+      id: nanoid(),
       title: addTitle,
       content: addContent,
+      author: "수진",
     };
     setTodos([...todos, newTodo]);
   };
@@ -32,7 +35,7 @@ export default function Create({ todos, setTodos }) {
           }}
           onSubmit={(e) => {
             e.preventDefault();
-            console.log("제출!");
+            // console.log("제출!");
           }}
         >
           <div>

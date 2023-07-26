@@ -9,8 +9,7 @@ export default function Edit({ todos, setTodos }) {
 
   const navigate = useNavigate();
 
-  const todoId = parseInt(id);
-  const todo = todos.find((todo) => todo.id === todoId);
+  const todo = todos.find((todo) => todo.id === id);
   // console.log(selectTodo);
 
   // 수정하기 내용을 저장
