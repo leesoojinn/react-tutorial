@@ -2,12 +2,16 @@ import React, { Fragment, useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { editTodo } from "..";
 
-export default function Edit({ todos, setTodos }) {
+export default function Edit() {
+  const todos = useSelector((state) => state.todos);
   const { id } = useParams();
   // console.log("id:", id);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const todo = todos.find((todo) => todo.id === id);
   // console.log(selectTodo);
@@ -16,18 +20,18 @@ export default function Edit({ todos, setTodos }) {
   const [title, setTitle] = useState(todo.title);
   const [content, setContent] = useState(todo.content);
 
+  // 수정 버튼 핸들러
   const upDatedTodoHandler = (e) => {
     e.preventDefault();
 
-    const upDatedTodo = { ...todo, title, content };
-    console.log(upDatedTodo);
+    dispatch(
+      editTodo({
+        id: todo.id,
+        title,
+        content,
+      })
+    );
 
-    //  일치하는 id만 바꿔주기  아니면 그대로 유지
-    const upDatedTodos = todos.map((p) => (p.id === todo.id ? upDatedTodo : p));
-
-    setTodos(upDatedTodos);
-
-    // 삭제되면 홈으로 이동
     navigate("/");
   };
 

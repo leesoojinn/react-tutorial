@@ -2,16 +2,15 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
+import { useDispatch, useSelector } from "react-redux";
+import { removeTodo } from "..";
 
-export default function Main({ todos, setTodos }) {
+export default function Main() {
+  // state.todos에서의 todos는 index.js에서 내가 reducer 안에 만든 이름이다.
+  const todos = useSelector((state) => state.todos);
+
   const navigate = useNavigate();
-
-  // 삭제 버튼
-  // filter로 같은 아이디 값이 아닌 것만 보이게 하기
-  const deletedButtonHandler = (todoId) => {
-    const deletedTodo = todos.filter((item) => item.id !== todoId);
-    setTodos(deletedTodo);
-  };
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -107,7 +106,8 @@ export default function Main({ todos, setTodos }) {
                 <button
                   onClick={() => {
                     alert("삭제할까?");
-                    deletedButtonHandler(todo.id);
+                    // 어떤 것을 지울 것인지 알려줘야한다. => todo.id
+                    dispatch(removeTodo(todo.id));
                   }}
                   style={{
                     border: "none",

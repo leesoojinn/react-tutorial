@@ -3,23 +3,32 @@ import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
+import { useDispatch } from "react-redux";
+import { addTodo } from "..";
 
 export default function Create({ todos, setTodos }) {
   const [addTitle, setAddTitle] = useState("");
   const [addContent, setAddContent] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const addButtonHandler = () => {
-    const newTodo = {
-      // 새로운 todo id 하나 늘리기
-      // 나중에 nanoId로
-      id: nanoid(),
-      title: addTitle,
-      content: addContent,
-      author: "수진",
-    };
-    setTodos([...todos, newTodo]);
+    dispatch(
+      addTodo({
+        id: nanoid(),
+        title: addTitle,
+        content: addContent,
+      })
+    );
+    // const newTodo = {
+    //   id: nanoid(),
+    //   title: addTitle,
+    //   content: addContent,
+    //   author: "수진",
+    // };
+    // setTodos([...todos, newTodo]);
+    navigate("/");
   };
 
   return (
@@ -35,7 +44,7 @@ export default function Create({ todos, setTodos }) {
           }}
           onSubmit={(e) => {
             e.preventDefault();
-            // console.log("제출!");
+            addButtonHandler();
           }}
         >
           <div>
@@ -76,10 +85,6 @@ export default function Create({ todos, setTodos }) {
             />
           </div>
           <button
-            onClick={() => {
-              addButtonHandler();
-              navigate("/");
-            }}
             style={{
               width: "100%",
               height: "40px",

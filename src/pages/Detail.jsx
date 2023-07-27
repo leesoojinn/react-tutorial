@@ -2,9 +2,13 @@ import React from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { removeTodo } from "..";
 
-export default function Detail({ todos, setTodos }) {
+export default function Detail() {
+  const todos = useSelector((state) => state.todos);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { id } = useParams();
   console.log("id:", id);
@@ -12,14 +16,6 @@ export default function Detail({ todos, setTodos }) {
   // 같은 아이디값 가져오기
   const todo = todos.find((todo) => todo.id === id);
   console.log(todo);
-
-  // 삭제 버튼
-  // filter로 같은 아이디 값이 아닌 것만 보이게 하기
-  const deletedButtonHandler = (todoId) => {
-    const deletedTodo = todos.filter((item) => item.id !== todoId);
-    setTodos(deletedTodo);
-    navigate("/");
-  };
 
   return (
     <>
@@ -70,7 +66,8 @@ export default function Detail({ todos, setTodos }) {
           <button
             onClick={() => {
               alert("삭제할까?");
-              deletedButtonHandler(todo.id);
+              dispatch(removeTodo(todo.id));
+              navigate("/");
             }}
             style={{
               border: "none",
