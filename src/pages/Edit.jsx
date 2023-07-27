@@ -29,6 +29,8 @@ export default function Edit() {
         id: todo.id,
         title,
         content,
+        // 작성자도 보여주기
+        author: todo.author,
       })
     );
 
