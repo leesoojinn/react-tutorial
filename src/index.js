@@ -73,5 +73,6 @@ root.render(
   </React.StrictMode>
 );
 
+// reducer 밖으로 보내기
 export const { addTodo, removeTodo, editTodo } = todos.actions;
 export default todos.reducer;

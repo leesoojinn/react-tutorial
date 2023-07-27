@@ -13,6 +13,7 @@ export default function Create({ todos, setTodos }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // 추가 버튼 핸들러
   const addButtonHandler = () => {
     dispatch(
       addTodo({
@@ -21,13 +22,6 @@ export default function Create({ todos, setTodos }) {
         content: addContent,
       })
     );
-    // const newTodo = {
-    //   id: nanoid(),
-    //   title: addTitle,
-    //   content: addContent,
-    //   author: "수진",
-    // };
-    // setTodos([...todos, newTodo]);
     navigate("/");
   };
 
