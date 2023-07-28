@@ -7,8 +7,10 @@ import { useDispatch } from "react-redux";
 import { addTodo } from "..";
 
 export default function Create() {
-  const [addTitle, setAddTitle] = useState("");
-  const [addContent, setAddContent] = useState("");
+  const [todoData, setTodoData] = useState({
+    title: "",
+    content: "",
+  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,8 +20,8 @@ export default function Create() {
     dispatch(
       addTodo({
         id: nanoid(),
-        title: addTitle,
-        content: addContent,
+        title: todoData,
+        content: todoData,
         author: "수진",
       })
     );
@@ -44,8 +46,8 @@ export default function Create() {
         >
           <div>
             <input
-              value={addTitle}
-              onChange={(e) => setAddTitle(e.target.value)}
+              value={todoData.title}
+              onChange={(e) => setTodoData(e.target.value)}
               placeholder="제목"
               style={{
                 width: "100%",
@@ -64,8 +66,8 @@ export default function Create() {
             }}
           >
             <textarea
-              value={addContent}
-              onChange={(e) => setAddContent(e.target.value)}
+              value={todoData.content}
+              onChange={(e) => setTodoData(e.target.value)}
               placeholder="내용"
               style={{
                 resize: "none",

@@ -17,15 +17,18 @@ export default function Edit() {
   // console.log(selectTodo);
 
   // 수정하기 내용을 저장
-  const [title, setTitle] = useState(todo.title);
-  const [content, setContent] = useState(todo.content);
+
+  const [todoData, setTodoData] = useState({
+    title: todo.title,
+    content: todo.content,
+  });
 
   // 수정 버튼 핸들러
   const upDatedTodoHandler = (e) => {
     e.preventDefault();
 
     // 스프레드 문법
-    const upDatedTodo = { ...todo, title, content };
+    const upDatedTodo = { ...todo, ...todoData };
     // 액션 생성자 editTodo s
     dispatch(editTodo(upDatedTodo));
 
@@ -47,8 +50,11 @@ export default function Edit() {
         >
           <div>
             <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={todoData.title}
+              onChange={(e) =>
+                // todoData를 보여주고 내용 추가
+                setTodoData({ ...todoData, title: e.target.value })
+              }
               placeholder="제목"
               style={{
                 width: "100%",
@@ -67,8 +73,11 @@ export default function Edit() {
             }}
           >
             <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              value={todoData.content}
+              onChange={(e) =>
+                // todoData를 보여주고 내용 추가
+                setTodoData({ ...todoData, content: e.target.value })
+              }
               placeholder="내용"
               style={{
                 resize: "none",

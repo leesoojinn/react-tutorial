@@ -40,7 +40,7 @@ export default function Main() {
           </button>
         </div>
         {/* map함수로 todos를 돌려 내용 가져오기 */}
-        {todos.map((todo) => (
+        {todos?.map((todo) => (
           <div
             // key값으로 고유한 값 넣어주기
             key={todo.id}
