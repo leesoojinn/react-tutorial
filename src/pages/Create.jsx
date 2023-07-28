@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { useDispatch } from "react-redux";
 import { addTodo } from "..";
 
-export default function Create({ todos, setTodos }) {
+export default function Create() {
   const [addTitle, setAddTitle] = useState("");
   const [addContent, setAddContent] = useState("");
 
@@ -20,6 +20,7 @@ export default function Create({ todos, setTodos }) {
         id: nanoid(),
         title: addTitle,
         content: addContent,
+        author: "수진",
       })
     );
     navigate("/");

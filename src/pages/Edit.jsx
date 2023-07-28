@@ -24,15 +24,10 @@ export default function Edit() {
   const upDatedTodoHandler = (e) => {
     e.preventDefault();
 
-    dispatch(
-      editTodo({
-        id: todo.id,
-        title,
-        content,
-        // 작성자도 보여주기
-        author: todo.author,
-      })
-    );
+    // 스프레드 문법
+    const upDatedTodo = { ...todo, title, content };
+    // 액션 생성자 editTodo s
+    dispatch(editTodo(upDatedTodo));
 
     navigate("/");
   };
