@@ -20,8 +20,8 @@ export default function Create() {
     dispatch(
       addTodo({
         id: nanoid(),
-        title: todoData,
-        content: todoData,
+        title: todoData.title,
+        content: todoData.content,
         author: "수진",
       })
     );
@@ -47,7 +47,10 @@ export default function Create() {
           <div>
             <input
               value={todoData.title}
-              onChange={(e) => setTodoData(e.target.value)}
+              onChange={(e) =>
+                // todoData 객체를 복제하되, title 프로퍼티만 새로 입력된 값으로 바꾼 새로운 객체를 만들어서 상태를 업데이트하라!!
+                setTodoData({ ...todoData, title: e.target.value })
+              }
               placeholder="제목"
               style={{
                 width: "100%",
@@ -67,7 +70,9 @@ export default function Create() {
           >
             <textarea
               value={todoData.content}
-              onChange={(e) => setTodoData(e.target.value)}
+              onChange={(e) =>
+                setTodoData({ ...todoData, content: e.target.value })
+              }
               placeholder="내용"
               style={{
                 resize: "none",

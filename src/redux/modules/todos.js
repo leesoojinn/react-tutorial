@@ -29,7 +29,8 @@ const todos = createSlice({
   reducers: {
     // 추가 기능
     addTodo: (state, action) => {
-      return [...state, action.payload];
+      // immer  => 불변성 유지하면서 상태를 수정
+      state.push(action.payload);
     },
 
     // 삭제 기능
