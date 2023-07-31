@@ -28,7 +28,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          {todo.title}
+          {todo?.title}
         </h1>
         <div
           style={{
@@ -38,7 +38,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          {todo.content}
+          {todo?.content}
         </div>
         <div
           style={{
