@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useDispatch, useSelector } from "react-redux";
-import { removeTodo } from "..";
+import { removeTodo } from "../redux/modules/todos";
 
 export default function Main() {
   // state.todos에서의 todos는 index.js에서 내가 reducer 안에 만든 이름이다.

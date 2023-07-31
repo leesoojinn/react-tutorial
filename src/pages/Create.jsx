@@ -4,7 +4,7 @@ import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { useDispatch } from "react-redux";
-import { addTodo } from "..";
+import { addTodo } from "../redux/modules/todos";
 
 export default function Create() {
   const [todoData, setTodoData] = useState({
