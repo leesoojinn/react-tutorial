@@ -8,9 +8,20 @@ import { removeTodo } from "../redux/modules/todos";
 export default function Main() {
   // state.todos에서의 todos는 index.js에서 내가 reducer 안에 만든 이름이다.
   const todos = useSelector((state) => state.todos);
+  // 로그인 정보 가져오기
+  const isSignupSuccess = useSelector((state) => state.signup.isSignupSuccess);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const addButton = () => {
+    if (!isSignupSuccess) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+    } else {
+      navigate("/create");
+    }
+  };
 
   return (
     <>
@@ -24,9 +35,7 @@ export default function Main() {
           }}
         >
           <button
-            onClick={() => {
-              navigate("/create");
-            }}
+            onClick={addButton}
             style={{
               border: "none",
               padding: "8px",
