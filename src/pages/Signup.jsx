@@ -13,7 +13,7 @@ export default function Signup() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // 사용자 인증 정보 변화 감지
   useEffect(() => {
@@ -27,6 +27,29 @@ export default function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
 
+    // 회원가입 유효성 검사
+    // 이메일 필드가 비어있는지 확인
+    if (!email) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+    // 비밀번호가 6자리 이상인지 확인
+    if (password.length < 6) {
+      alert("비밀번호는 6자리 이상이어야 합니다.");
+      return;
+    }
+    // 비밀번호, 비밀번호 확인 필드가 비어있는지 확인
+    if (!password || !confirmPassword) {
+      alert("비밀번호와 비밀번호 확인을 모두 입력해주세요.");
+      return;
+    }
+
+    // 비밀번호와 비밀번호 확인이 일치하는지 확인
+    if (password !== confirmPassword) {
+      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+      return;
+    }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -38,6 +61,19 @@ export default function Signup() {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log("error with signup", errorCode, errorMessage);
+
+      // firebase 회원가입 에러 발생 시 에러 처리
+      switch (errorCode) {
+        case "auth/invalid-email":
+          alert("유효하지 않은 이메일 형식입니다.");
+          break;
+        case "auth/email-already-in-use":
+          alert("이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.");
+          break;
+        default:
+          alert(errorMessage);
+          break;
+      }
     }
   };
 
@@ -104,6 +140,8 @@ export default function Signup() {
               }}
             >
               <input
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="비밀번호 확인"
                 type="password"
                 style={{
