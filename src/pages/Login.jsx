@@ -1,10 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // 사용자 인증 정보 변화 감지
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log("user", user);
+    });
+  }, []);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("user with login", userCredential.user);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("error with signup", errorCode, errorMessage);
+    }
+  };
 
   return (
     <>
@@ -26,6 +53,8 @@ export default function Login() {
               }}
             >
               <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="이메일"
                 style={{
                   width: "100%",
@@ -45,6 +74,8 @@ export default function Login() {
               }}
             >
               <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="비밀번호"
                 type="password"
                 style={{
@@ -65,6 +96,7 @@ export default function Login() {
               }}
             >
               <button
+                onClick={handleLogin}
                 style={{
                   width: "100%",
                   border: "none",
