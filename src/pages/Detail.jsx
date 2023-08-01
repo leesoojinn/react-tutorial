@@ -7,6 +7,8 @@ import { removeTodo } from "../redux/modules/todos";
 
 export default function Detail() {
   const todos = useSelector((state) => state.todos);
+  const userEmail = useSelector((state) => state.signup.userEmail);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -49,6 +51,11 @@ export default function Detail() {
         >
           <button
             onClick={() => {
+              if (todo.author !== userEmail) {
+                alert("게시글 작성자만 수정 가능합니다.");
+                return;
+              }
+
               navigate(`/edit/${todo.id}`);
             }}
             style={{
@@ -65,6 +72,11 @@ export default function Detail() {
           </button>
           <button
             onClick={() => {
+              if (todo.author !== userEmail) {
+                alert("게시글 작성자만 삭제 가능합니다.");
+                return;
+              }
+
               alert("삭제할까?");
               dispatch(removeTodo(todo.id));
               navigate("/");

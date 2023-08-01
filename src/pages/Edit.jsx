@@ -7,6 +7,7 @@ import { editTodo } from "../redux/modules/todos";
 
 export default function Edit() {
   const todos = useSelector((state) => state.todos);
+
   const { id } = useParams();
   // console.log("id:", id);
 

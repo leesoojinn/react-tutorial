@@ -3,10 +3,13 @@ import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTodo } from "../redux/modules/todos";
 
 export default function Create() {
+  // 로그인한 이메일을 author로 설정
+  const userEmail = useSelector((state) => state.signup.userEmail);
+
   const [todoData, setTodoData] = useState({
     title: "",
     content: "",
@@ -22,7 +25,7 @@ export default function Create() {
         id: nanoid(),
         title: todoData.title,
         content: todoData.content,
-        author: "수진",
+        author: userEmail,
       })
     );
     navigate("/");

@@ -10,10 +10,12 @@ export default function Main() {
   const todos = useSelector((state) => state.todos);
   // 로그인 정보 가져오기
   const isSignupSuccess = useSelector((state) => state.signup.isSignupSuccess);
+  const userEmail = useSelector((state) => state.signup.userEmail);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // 추가 버튼
   const addButton = () => {
     if (!isSignupSuccess) {
       alert("로그인이 필요합니다.");
@@ -98,6 +100,12 @@ export default function Main() {
               <div>
                 <button
                   onClick={() => {
+                    // 로그인한 이메일이 일치해야 수정이 가능
+                    if (todo.author !== userEmail) {
+                      alert("게시글 작성자만 수정 가능합니다.");
+                      return;
+                    }
+
                     navigate(`/edit/${todo.id}`);
                   }}
                   style={{
@@ -114,6 +122,12 @@ export default function Main() {
                 </button>
                 <button
                   onClick={() => {
+                    // 로그인한 이메일이 일치해야 삭제 가능
+                    if (todo.author !== userEmail) {
+                      alert("게시글 작성자만 수정 가능합니다.");
+                      return;
+                    }
+
                     alert("삭제할까?");
                     // 어떤 것을 지울 것인지 알려줘야한다. => todo.id
                     dispatch(removeTodo(todo.id));
