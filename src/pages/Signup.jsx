@@ -1,10 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Signup() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
+
+  // 사용자 인증 정보 변화 감지
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log("user", user);
+    });
+  }, []);
+
+  // 회원가입 (신규 사용자 가입)
+  // async~await으로 가독성 높이기
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("user", userCredential.user);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("error with signup", errorCode, errorMessage);
+    }
+  };
 
   return (
     <>
@@ -26,6 +61,8 @@ export default function Signup() {
               }}
             >
               <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="이메일"
                 style={{
                   width: "100%",
@@ -45,6 +82,8 @@ export default function Signup() {
               }}
             >
               <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="비밀번호"
                 type="password"
                 style={{
@@ -85,6 +124,7 @@ export default function Signup() {
               }}
             >
               <button
+                onClick={handleSignup}
                 style={{
                   width: "100%",
                   border: "none",
