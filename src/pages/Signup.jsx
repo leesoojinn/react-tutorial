@@ -7,9 +7,12 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { useDispatch } from "react-redux";
+import { signupSuccess } from "../redux/modules/signup";
 
 export default function Signup() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,6 +60,10 @@ export default function Signup() {
         password
       );
       console.log("user", userCredential.user);
+
+      // 회원가입 성공 시 사용자 이메일을 redux 상태에 저장
+      dispatch(signupSuccess(email));
+
       alert("회원가입에 성공했습니다.");
       navigate("/");
     } catch (error) {
