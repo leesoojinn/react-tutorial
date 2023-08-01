@@ -14,8 +14,13 @@ const signup = createSlice({
       // 회원가입 성공 시 사용자 이메일 정보 저장
       state.userEmail = action.payload;
     },
+    // 로그아웃 기능
+    logout: (state) => {
+      state.isSignupSuccess = false;
+      state.userEmail = null;
+    },
   },
 });
 
-export const { signupSuccess } = signup.actions;
+export const { signupSuccess, logout } = signup.actions;
 export default signup.reducer;

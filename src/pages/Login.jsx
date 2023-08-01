@@ -4,9 +4,13 @@ import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { useDispatch } from "react-redux";
+import { signupSuccess } from "../redux/modules/signup";
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,6 +23,19 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    // 로그인 유효성 검사
+    // 이메일 필드가 비어있는지 확인
+    if (!email) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+    // 비밀번호 필드가 비어있는지 확인
+    if (!password) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -26,10 +43,32 @@ export default function Login() {
         password
       );
       console.log("user with login", userCredential.user);
+
+      // 로그인 성공 시 사용자 이메일을 redux 상태에 저장
+      dispatch(signupSuccess(email));
+
+      alert("로그인에 성공했습니다.");
+      navigate("/");
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log("error with signup", errorCode, errorMessage);
+
+      // firebase 로그인 에러 발생 시 에러 처리
+      switch (errorCode) {
+        case "auth/invalid-email":
+          alert("유효하지 않은 이메일 형식입니다.");
+          break;
+        case "auth/wrong-password":
+          alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+          break;
+        case "auth/user-not-found":
+          alert("일치하는 정보가 없습니다.");
+          break;
+        default:
+          alert(errorMessage);
+          break;
+      }
     }
   };
 
