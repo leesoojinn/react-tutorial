@@ -57,6 +57,8 @@ export default function Signup() {
         password
       );
       console.log("user", userCredential.user);
+      alert("회원가입에 성공했습니다.");
+      navigate("/");
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
