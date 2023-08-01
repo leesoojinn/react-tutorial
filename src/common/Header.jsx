@@ -47,7 +47,21 @@ export default function Header() {
       {isSignupSuccess ? (
         <div>
           <p>{userEmail}</p>
-          <button onClick={handleLogout}>로그아웃</button>
+          <button
+            onClick={handleLogout}
+            style={{
+              border: "none",
+              padding: "8px",
+              borderRadius: "6px",
+              backgroundColor: "#fccae7",
+              color: "black",
+              cursor: "pointer",
+            }}
+            // #fccae7
+            // #cafcf7
+          >
+            로그아웃
+          </button>
         </div>
       ) : (
         <div
