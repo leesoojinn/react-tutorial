@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useDispatch } from "react-redux";
 import { signupSuccess } from "../redux/modules/signup";
@@ -13,13 +13,6 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // 사용자 인증 정보 변화 감지
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      console.log("user", user);
-    });
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
