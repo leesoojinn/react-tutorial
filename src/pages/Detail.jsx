@@ -2,22 +2,48 @@ import React from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { removeTodo } from "../redux/modules/todos";
+import { useSelector } from "react-redux";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import axios from "axios";
 
 export default function Detail() {
-  const todos = useSelector((state) => state.todos);
   const userEmail = useSelector((state) => state.signup.userEmail);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
+  const queryClient = useQueryClient();
   const { id } = useParams();
-  console.log("id:", id);
 
-  // 같은 아이디값 가져오기
-  const todo = todos.find((todo) => todo.id === id);
-  console.log(todo);
+  // ["todos", id] => 배열로 구성되며, 이 배열이 캐싱된 데이터를 구분하는 식별자 역할을 한다.
+  // id 값이 변경될 때마다 새로운 요청이 발생하여 새로운 데이터를 가져오게 된다.
+  const { data, isLoading, isError, error } = useQuery(
+    ["todos", id],
+    async () => {
+      const response = await axios.get(`http://localhost:4000/todos/${id}`);
+      return response.data;
+    }
+  );
+
+  // 삭제 버튼
+  const deleteTodo = useMutation(
+    async (todo) => {
+      await axios.delete(`http://localhost:4000/todos/${todo.id}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("todos");
+      },
+    }
+  );
+
+  if (isLoading) {
+    return <div>로딩 중 ...</div>;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+  if (!data) {
+    return <div>게시물을 찾을 수 없습니다.</div>;
+  }
 
   return (
     <>
@@ -30,7 +56,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          {todo?.title}
+          {data?.title}
         </h1>
         <div
           style={{
@@ -40,7 +66,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          {todo?.content}
+          {data?.content}
         </div>
         <div
           style={{
@@ -51,12 +77,12 @@ export default function Detail() {
         >
           <button
             onClick={() => {
-              if (todo.author !== userEmail) {
+              if (data.author !== userEmail) {
                 alert("게시글 작성자만 수정 가능합니다.");
                 return;
               }
 
-              navigate(`/edit/${todo.id}`);
+              navigate(`/edit/${data.id}`);
             }}
             style={{
               border: "none",
@@ -72,13 +98,13 @@ export default function Detail() {
           </button>
           <button
             onClick={() => {
-              if (todo.author !== userEmail) {
+              if (data.author !== userEmail) {
                 alert("게시글 작성자만 삭제 가능합니다.");
                 return;
               }
 
               alert("삭제할까?");
-              dispatch(removeTodo(todo.id));
+              deleteTodo.mutate(data);
               navigate("/");
             }}
             style={{

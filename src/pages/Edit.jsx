@@ -1,40 +1,79 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { editTodo } from "../redux/modules/todos";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import axios from "axios";
 
 export default function Edit() {
-  const todos = useSelector((state) => state.todos);
-
-  const { id } = useParams();
-  // console.log("id:", id);
-
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const { id } = useParams();
 
-  const todo = todos.find((todo) => todo.id === id);
-  // console.log(selectTodo);
+  const { data, isLoading, isError, error } = useQuery(
+    ["todos", id],
+    async () => {
+      const response = await axios.get(`http://localhost:4000/todos/${id}`);
+      return response.data;
+    }
+  );
 
   // 수정하기 내용을 저장
-
   const [todoData, setTodoData] = useState({
-    title: todo.title,
-    content: todo.content,
+    title: "",
+    content: "",
   });
+
+  // 데이터가 로딩되면 todoData 초기화
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      setTodoData({
+        title: data.title,
+        content: data.content,
+      });
+    }
+  }, [data, isLoading, isError]);
+
+  // 수정 API 요청을 위한 useMutation 훅 사용
+  const editTodoMutation = useMutation(
+    async (updatedTodo) => {
+      const response = await axios.put(
+        `http://localhost:4000/todos/${updatedTodo.id}`,
+        updatedTodo
+      );
+      return response.data;
+    },
+    {
+      // 요청이 성공적으로 완료되면 react-query 캐시를 갱신하기 위해 onSuccess 콜백 사용
+      onSuccess: () => {
+        // 캐시 갱신
+        queryClient.invalidateQueries("todos");
+        // 수정 완료 후 메인 페이지로 이동
+        navigate("/");
+      },
+    }
+  );
 
   // 수정 버튼 핸들러
   const upDatedTodoHandler = (e) => {
     e.preventDefault();
 
     // 스프레드 문법
-    const upDatedTodo = { ...todo, ...todoData };
-    // 액션 생성자 editTodo s
-    dispatch(editTodo(upDatedTodo));
+    const updatedTodo = { ...data, ...todoData };
+    editTodoMutation.mutate(updatedTodo);
 
     navigate("/");
   };
+
+  if (isLoading) {
+    return <div>로딩 중 ...</div>;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+  if (!data) {
+    return <div>게시물을 찾을 수 없습니다.</div>;
+  }
 
   return (
     <Fragment>

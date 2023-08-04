@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { logout } from "../redux/modules/signup";
+import { logout, signupSuccess } from "../redux/modules/signup";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -13,6 +13,17 @@ export default function Header() {
   // 회원가입 정보 가져오기
   const isSignupSuccess = useSelector((state) => state.signup.isSignupSuccess);
   const userEmail = useSelector((state) => state.signup.userEmail);
+
+  // 사용자 인증 정보 변화 감지
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(signupSuccess(user.email));
+      }
+    });
+    // 컴포넌트가 언마운트될 때 observer를 해제한다
+    return () => unsubscribe();
+  }, [dispatch]);
 
   // 로그아웃 버튼 핸들러
   const handleLogout = async (event) => {

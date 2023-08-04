@@ -2,18 +2,24 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
-import { useDispatch, useSelector } from "react-redux";
-import { removeTodo } from "../redux/modules/todos";
+import { useSelector } from "react-redux";
+
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import axios from "axios";
 
 export default function Main() {
-  // state.todos에서의 todos는 index.js에서 내가 reducer 안에 만든 이름이다.
-  const todos = useSelector((state) => state.todos);
   // 로그인 정보 가져오기
   const isSignupSuccess = useSelector((state) => state.signup.isSignupSuccess);
   const userEmail = useSelector((state) => state.signup.userEmail);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isError, error } = useQuery("todos", async () => {
+    const response = await axios.get("http://localhost:4000/todos");
+    return response.data;
+  });
 
   // 추가 버튼
   const addButton = () => {
@@ -24,6 +30,18 @@ export default function Main() {
       navigate("/create");
     }
   };
+
+  // 삭제 버튼
+  const deleteTodo = useMutation(
+    async (todo) => {
+      await axios.delete(`http://localhost:4000/todos/${todo.id}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("todos");
+      },
+    }
+  );
 
   return (
     <>
@@ -50,8 +68,10 @@ export default function Main() {
             추가
           </button>
         </div>
-        {/* map함수로 todos를 돌려 내용 가져오기 */}
-        {todos?.map((todo) => (
+        {/* 앞에가 true면 뒤에 꺼 보여주기 */}
+        {isLoading === true && <div>로딩 중 ...</div>}
+        {isError === true && <div>{error.message}</div>}
+        {data?.map((todo) => (
           <div
             // key값으로 고유한 값 넣어주기
             key={todo.id}
@@ -129,8 +149,7 @@ export default function Main() {
                     }
 
                     alert("삭제할까?");
-                    // 어떤 것을 지울 것인지 알려줘야한다. => todo.id
-                    dispatch(removeTodo(todo.id));
+                    deleteTodo.mutate(todo);
                   }}
                   style={{
                     border: "none",

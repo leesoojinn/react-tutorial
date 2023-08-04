@@ -3,8 +3,10 @@ import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
-import { useDispatch, useSelector } from "react-redux";
-import { addTodo } from "../redux/modules/todos";
+import { useSelector } from "react-redux";
+
+import { useMutation, useQueryClient } from "react-query";
+import axios from "axios";
 
 export default function Create() {
   // 로그인한 이메일을 author로 설정
@@ -16,20 +18,21 @@ export default function Create() {
   });
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   // 추가 버튼 핸들러
-  const addButtonHandler = () => {
-    dispatch(
-      addTodo({
-        id: nanoid(),
-        title: todoData.title,
-        content: todoData.content,
-        author: userEmail,
-      })
-    );
-    navigate("/");
-  };
+  const addButtonHandler = useMutation(
+    async (newTodo) => {
+      await axios.post("http://localhost:4000/todos", newTodo);
+    },
+    {
+      onSuccess: () => {
+        // 성공적으로 추가되었을 때 해당 쿼리를 무효화 => 새로운 데이터를 가져오도록 한다.
+        queryClient.invalidateQueries("todos");
+        navigate("/");
+      },
+    }
+  );
 
   return (
     <>
@@ -44,7 +47,12 @@ export default function Create() {
           }}
           onSubmit={(e) => {
             e.preventDefault();
-            addButtonHandler();
+            addButtonHandler.mutate({
+              id: nanoid(),
+              title: todoData.title,
+              content: todoData.content,
+              author: userEmail,
+            });
           }}
         >
           <div>
